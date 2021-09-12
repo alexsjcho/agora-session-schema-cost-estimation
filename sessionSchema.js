@@ -1,43 +1,51 @@
 
-import {RESOLUTION} from "./constants"
 import {hostTotalAggregateVideoResolution} from "./util/aggregateVideoResolution"
 
-class SessionSchema {
+//TODO: convert to Typescript in the future
 
- constructor(
-    duration,
-    mode,
-    hostCount,
-    audienceCount,
-    sessionCount,
-    maxHostAggregateResolution,
-    maxAudienceAggregateResolution
-  ) {
-    this.duration = duration;
-    this.mode = mode;
-    this.hostCount = hostCount;
-    this.audienceCount = audienceCount;
-    this.sessionCount = sessionCount;
-    this.maxHostAggregateResolution = maxHostAggregateResolution;
-    this.maxAudienceAggregateResolution = maxAudienceAggregateResolution;
-  }
-
-
-  hostTotalAggregateVideoResolution(videoProfile,totalHostCount, totalResolutionForUser) {
-    let videoProfile = 720;
-    let totalHostCount = 2;
-    totalResolutionForUser(videoProfile, totalHostCount)
-  }
-
+const sessionConfig = {
+  //number
+  duration: 0,
+  //string: "communication", "broadcast"
+  mode: "communication",
+  //number
+  hostCount: 1,
+  //number
+  audienceCount: 0,
+  //number
+  hostMaxAggregateVideoResolution: 921600,
+  //number
+  maxAudienceAggregateVideoResoltuion:2073600
 }
 
-let VideoConference = SessionSchema.createSchema(
-  30,
-  "communication",
-  2,
-  0,
-  "Full HD",
-  null
-);
+const sessionUserConfig = {
+  //number
+  totalHostCount: 2
+  //number
+  totalAudienceCount: 0,
+  //number
+  hostVideoProfile: 720,
+   //string: "premium","standard"
+  audienceStreamingType: null,
+  //string: "premium"
+  hostStreamingType: "premium"
+}
 
-console.log(VideoConference);
+
+const hostsTotalAggregateVideoResolution = function (sessionUserConfig = {totalHostCount, hostVideoProfile}) {
+  return {
+    totalResolutionForUser(videoProfile, totalUserCount)
+  }
+}
+
+const audiencesTotalAggregateVideoResolution = function (sessionUserConfig = totalHostCount, hostVideoProfile ){
+  notSubLocalHostLogic = false
+  return {
+    totalResolutionForUser(totalHostCount, hostVideoProfile)
+  }
+}
+
+
+
+
+
