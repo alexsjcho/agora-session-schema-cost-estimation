@@ -1,7 +1,22 @@
-import sessionSchema from "./sessionSchema.js";
+import Session from "./Session.js";
 
-let res = sessionSchema.audienceTotalAggregateVideoResolution(
-  sessionSchema.sessionUserConfig
+const manyToManyVideoStream = new Session(
+  //duration
+  60,
+  // host aggregate resolution
+  921600,
+  // audience resolution
+  2073600,
+  // host count
+  3,
+  // audience count
+  97,
+  // channel mode
+  "broadcast",
+  //host streaming type
+  "premium",
+  //audience streaming type
+  "standard"
 );
 
-console.log(res);
+console.log(manyToManyVideoStream);
