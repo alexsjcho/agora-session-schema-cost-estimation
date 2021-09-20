@@ -12,7 +12,7 @@ const manyToManyVideoStream = new Session(
   // audience count
   97,
   // channel mode
-  "broadcast",
+  "communication",
   //host streaming type
   "premium",
   //audience streaming type
@@ -20,3 +20,6 @@ const manyToManyVideoStream = new Session(
 );
 
 console.log(manyToManyVideoStream);
+console.log(
+  manyToManyVideoStream.calculateCommunicationModeMaxSessionCost(720)
+);

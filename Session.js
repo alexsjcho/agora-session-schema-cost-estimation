@@ -1,4 +1,8 @@
-// import { hostTotalAggregateVideoResolution } from "./util/aggregateVideoResolution";
+import { totalAggregateVideoResolution } from "./util/aggregateVideoResolution.js";
+import {
+  calculateVideoStreamingVariant,
+  calculateVideoStreamingChargePerMin,
+} from "./util/costBasedOnResolution.js";
 
 //TODO: convert to Typescript in the future
 //TODO: fix import of totalResolutionForUser()
@@ -41,50 +45,32 @@ class Session {
     );
   }
 
-  calculateMaxSessionCost(
-    sessionConfig,
-    sessionUserConfig,
-    hostsTotalAggregateVideoResolution
-  ) {
-    let hostCost, audienceCost;
+  calculateCommunicationModeMaxSessionCost(hostVideoProfile) {
+    let sessionTotalCost;
+    let sessionAggregateVideoResolution;
+    let videoStreamingVariant;
+    let costPerUserPerMin;
+    let communicationSessionTotalCost;
 
-    if ((sessionConfig.mode = "communication")) {
-      hostCost =
-        sessionUserConfig.totalHostCount * hostsTotalAggregateVideoResolution;
-    } else {
-      hostCost =
-        sessionUserConfig.totalHostCount * hostsTotalAggregateVideoResolution;
-      audienceCost =
-        sessionUserConfig.totalAudienceCount *
-        audiencesTotalAggregateVideoResolution;
+    if ((this.sessionMode = "communication")) {
+      sessionAggregateVideoResolution =
+        this.maxHostCount *
+        totalAggregateVideoResolution(
+          hostVideoProfile,
+          this.maxHostCount,
+          true
+        );
+      videoStreamingVariant = calculateVideoStreamingVariant(
+        sessionAggregateVideoResolution
+      );
+      costPerUserPerMin = calculateVideoStreamingChargePerMin(
+        sessionAggregateVideoResolution,
+        videoStreamingVariant
+      );
+      communicationSessionTotalCost = costPerUserPerMin * this.maxHostCount;
     }
-  }
 
-  totalResolutionForUser(videoProfile, totalUserCount, notSubLocalHostLogic) {
-    let aggregateHostVideoResolution = 0;
-    if (notSubLocalHostLogic === true) {
-      aggregateHostVideoResolution = totalUserCount - 1;
-    } else {
-      aggregateHostVideoResolution = totalUserCount;
-    }
-    switch (videoProfile) {
-      case 120:
-        return 120 * 160 * totalUserCount;
-      case 180:
-        return 180 * 320 * totalUserCount;
-      case 240:
-        return 240 * 320 * totalUserCount;
-      case 360:
-        return 360 * 640 * totalUserCount;
-      case 480:
-        return 480 * 640 * totalUserCount;
-      case 720:
-        return 720 * 1280 * totalUserCount;
-      case 1080:
-        return 1080 * 1920 * totalUserCount;
-      default:
-        return 120 * 160;
-    }
+    return { communicationSessionTotalCost };
   }
 }
 
