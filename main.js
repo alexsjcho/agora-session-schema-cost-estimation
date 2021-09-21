@@ -13,6 +13,4 @@ const manyToManyVideoStream = new Session({
 });
 
 console.log(manyToManyVideoStream);
-console.log(
-  manyToManyVideoStream.calculateCommunicationModeMaxSessionCost(720)
-);
+console.log(manyToManyVideoStream.calculateMaxSessionCost());

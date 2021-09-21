@@ -50,32 +50,36 @@ class Session {
     );
   }
 
-  calculateCommunicationModeMaxSessionCost(hostVideoProfile) {
-    let sessionTotalCost;
-    let sessionAggregateVideoResolution;
-    let videoStreamingVariant;
-    let costPerUserPerMin;
-    let communicationSessionTotalCost;
+  calculateMaxSessionCost() {
+    let sessionTotalAggregateVideoResolutionValue,
+      sessionVideoStreamingVariant,
+      sessionVideoStreamingCharge,
+      sessionTotalCost;
 
     if ((this.sessionMode = "communication")) {
-      sessionAggregateVideoResolution =
-        this.maxHostCount *
-        totalAggregateVideoResolution(
-          hostVideoProfile,
-          this.maxHostCount,
-          true
-        );
-      videoStreamingVariant = calculateVideoStreamingVariant(
-        sessionAggregateVideoResolution
+      sessionTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
+        this.hostVideoProfile,
+        this.maxHostCount,
+        true
       );
-      costPerUserPerMin = calculateVideoStreamingChargePerMin(
-        sessionAggregateVideoResolution,
-        videoStreamingVariant
+      console.log(
+        "sessionTotalAggregateVideoResolutionValue:",
+        sessionTotalAggregateVideoResolutionValue
       );
-      communicationSessionTotalCost = costPerUserPerMin * this.maxHostCount;
+      sessionVideoStreamingVariant = calculateVideoStreamingVariant(
+        sessionTotalAggregateVideoResolutionValue
+      );
+      console.log(
+        "sessionVideoStreamingVariant:",
+        sessionVideoStreamingVariant
+      );
+      sessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
+        this.hostStreamingMode,
+        sessionTotalAggregateVideoResolutionValue
+      );
+      console.log("sessionVideoStreamingCharge:", sessionVideoStreamingCharge);
     }
-
-    return { communicationSessionTotalCost };
+    return { sessionVideoStreamingCharge };
   }
 }
 
