@@ -8,17 +8,20 @@ import {
 //TODO: fix import of totalResolutionForUser()
 
 class Session {
-  constructor(
+  //using Builder design pattern
+  constructor({
     maxMinuteDuration,
+    hostVideoProfile,
     maxHostAggregateResolution,
     maxAudienceAggregateResolution,
     maxHostCount,
     maxAudienceCount,
     sessionMode,
-    hostStreamingMode,
-    audienceStreamingMode
-  ) {
+    audienceStreamingMode,
+    isAudioOnly,
+  } = {}) {
     this.maxMinuteDuration = maxMinuteDuration;
+    this.hostVideoProfile = hostVideoProfile;
     this.maxHostAggregateResolution = maxHostAggregateResolution;
     this.maxAudienceAggregateResolution = maxAudienceAggregateResolution;
     this.maxHostCount = maxHostCount;
@@ -26,9 +29,11 @@ class Session {
     //can be either "broadcast" or "communication"
     this.sessionMode = sessionMode;
     //host streaming mode is always premium for low latency
-    this.hostStreamingMode = hostStreamingMode;
+    this.hostStreamingMode = "premium";
     //audence streaming mode can be either "premium" or "standard"
     this.audienceStreamingMode = audienceStreamingMode;
+    //boolean
+    this.isAudioOnly = isAudioOnly;
   }
 
   hostsTotalAggregateVideoResolution(

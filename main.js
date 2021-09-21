@@ -1,23 +1,16 @@
 import Session from "./Session.js";
 
-const manyToManyVideoStream = new Session(
-  //duration
-  60,
-  // host aggregate resolution
-  921600,
-  // audience resolution
-  2073600,
-  // host count
-  3,
-  // audience count
-  97,
-  // channel mode
-  "communication",
-  //host streaming type
-  "premium",
-  //audience streaming type
-  "standard"
-);
+const manyToManyVideoStream = new Session({
+  maxMinuteDuration: 60,
+  hostVideoProfile: 720,
+  maxHostAggregateResolution: 921600,
+  maxAudienceAggregateResolution: 2073600,
+  maxHostCount: 3,
+  maxAudienceCount: 97,
+  sessionMode: "communication",
+  audienceStreamingMode: "standard",
+  isAudioOnly: false,
+});
 
 console.log(manyToManyVideoStream);
 console.log(
