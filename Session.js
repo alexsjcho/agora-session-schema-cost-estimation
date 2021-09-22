@@ -52,7 +52,6 @@ class Session {
 
   calculateMaxSessionCost() {
     let sessionTotalAggregateVideoResolutionValue,
-      sessionVideoStreamingVariant,
       sessionVideoStreamingCharge,
       sessionTotalCost;
 
@@ -66,20 +65,16 @@ class Session {
         "sessionTotalAggregateVideoResolutionValue:",
         sessionTotalAggregateVideoResolutionValue
       );
-      sessionVideoStreamingVariant = calculateVideoStreamingVariant(
-        sessionTotalAggregateVideoResolutionValue
-      );
-      console.log(
-        "sessionVideoStreamingVariant:",
-        sessionVideoStreamingVariant
-      );
+
       sessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
         this.hostStreamingMode,
         sessionTotalAggregateVideoResolutionValue
       );
       console.log("sessionVideoStreamingCharge:", sessionVideoStreamingCharge);
     }
-    return { sessionVideoStreamingCharge };
+    sessionTotalCost =
+      this.maxHostCount * this.maxMinuteDuration * sessionVideoStreamingCharge;
+    return { sessionTotalCost };
   }
 }
 

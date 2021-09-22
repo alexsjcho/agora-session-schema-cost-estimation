@@ -2,7 +2,7 @@ import Session from "./Session.js";
 
 const manyToManyVideoStream = new Session({
   maxMinuteDuration: 60,
-  hostVideoProfile: 720,
+  hostVideoProfile: 360,
   maxHostAggregateResolution: 921600,
   maxAudienceAggregateResolution: 2073600,
   maxHostCount: 3,

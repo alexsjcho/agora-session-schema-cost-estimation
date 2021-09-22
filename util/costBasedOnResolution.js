@@ -1,4 +1,5 @@
 import { RESOLUTION, AUDIENCETYPE } from "../constants/constants.js";
+import { standardStreaming, premiumStreaming } from "../data/unitPrice.js";
 
 export const calculateVideoStreamingVariant = (resolutionValue) => {
   if (resolutionValue <= 921600) {
@@ -13,31 +14,34 @@ export const calculateVideoStreamingVariant = (resolutionValue) => {
 };
 
 export const calculateVideoStreamingChargePerMin = (audience, resolution) => {
-  switch (audience.type) {
+  console.log("audience value:", audience);
+  console.log("resolution value:", resolution);
+
+  switch (audience) {
     case AUDIENCETYPE.STANDARD:
       switch (resolution) {
         case RESOLUTION.HD:
-          return standardHdCost;
+          return standardStreaming.standardHdCost;
         case RESOLUTION.FULLHD:
-          return standardFullHDCost;
+          return standardStreaming.standardFullHDCost;
         case RESOLUTION.TWOK:
-          return standard2KCost;
+          return standardStreaming.standard2KCost;
         case RESOLUTION.TWOKPLUS:
-          return standard2KPlusCost, totalMonthlyMin;
+          return standardStreaming.standard2KPlusCost;
         default:
           break;
       }
       break;
-    case "premium":
+    case AUDIENCETYPE.PREMIUM:
       switch (resolution) {
         case RESOLUTION.HD:
-          return premiumHdCost, totalMonthlyMin;
+          return premiumStreaming.premiumHdCost;
         case RESOLUTION.FULLHD:
-          return premiumFullHdCost, totalMonthlyMin;
+          return premiumStreaming.premiumFullHdCost;
         case RESOLUTION.TWOK:
-          return premium2KCost, totalMonthlyMin;
+          return premiumStreaming.premium2KCost;
         case RESOLUTION.TWOKPLUS:
-          return premium2KPlusCost, totalMonthlyMin;
+          return premiumStreaming.premium2KPlusCost;
         default:
           break;
       }
