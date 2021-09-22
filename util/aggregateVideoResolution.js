@@ -3,31 +3,31 @@ import { RESOLUTION } from "../constants/constants.js";
 const totalResolutionForUser = (
   videoProfile,
   totalUserCount,
-  notSubLocalHostLogic
+  subtractLocalHostResolution
 ) => {
   let aggregateHostVideoResolution = 0;
-  if (notSubLocalHostLogic === true) {
-    aggregateHostVideoResolution = totalUserCount - 1;
-  } else {
-    aggregateHostVideoResolution = totalUserCount;
+
+  if (subtractLocalHostResolution) {
+    totalUserCount - 1;
   }
+  console.log("TOTAL USER COUNT", totalUserCount);
   switch (videoProfile) {
     case 120:
-      return 120 * 160 * totalUserCount;
+      return (aggregateHostVideoResolution = 120 * 160 * totalUserCount);
     case 180:
-      return 180 * 320 * totalUserCount;
+      return (aggregateHostVideoResolution = 180 * 320 * totalUserCount);
     case 240:
-      return 240 * 320 * totalUserCount;
+      return (aggregateHostVideoResolution = 240 * 320 * totalUserCount);
     case 360:
-      return 360 * 640 * totalUserCount;
+      return (aggregateHostVideoResolution = 360 * 640 * totalUserCount);
     case 480:
-      return 480 * 640 * totalUserCount;
+      return (aggregateHostVideoResolution = 480 * 640 * totalUserCount);
     case 720:
-      return 720 * 1280 * totalUserCount;
+      return (aggregateHostVideoResolution = 720 * 1280 * totalUserCount);
     case 1080:
-      return 1080 * 1920 * totalUserCount;
+      return (aggregateHostVideoResolution = 1080 * 1920 * totalUserCount);
     default:
-      return 120 * 160;
+      return (aggregateHostVideoResolution = 120 * 160 * totalUserCount);
   }
 };
 
@@ -46,12 +46,12 @@ const videoStreamingVariant = (resolutionValue) => {
 export const totalAggregateVideoResolution = (
   videoProfile,
   totalUserCount,
-  notSubLocalHostLogic
+  subtractLocalHostResolution
 ) => {
   const value = totalResolutionForUser(
     videoProfile,
     totalUserCount,
-    notSubLocalHostLogic
+    subtractLocalHostResolution
   );
   const resolution = videoStreamingVariant(value);
   return resolution;

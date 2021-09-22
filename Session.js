@@ -59,7 +59,7 @@ class Session {
       sessionTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
         this.hostVideoProfile,
         this.maxHostCount,
-        true
+        false
       );
       console.log(
         "sessionTotalAggregateVideoResolutionValue:",
