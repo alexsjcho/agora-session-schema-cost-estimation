@@ -56,6 +56,7 @@ class Session {
 
     if ((this.sessionMode = "communication")) {
       hostCount = this.maxHostCount;
+      totalUserCount = hostCount;
     } else if ((this.sessionMode = "broadcast")) {
       hostCount = this.maxHostCount;
       audienceCount = this.maxAudienceCount;

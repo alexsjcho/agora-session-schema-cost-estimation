@@ -13,4 +13,4 @@ const manyToManyVideoStream = new Session({
 });
 
 console.log(manyToManyVideoStream);
-console.log(manyToManyVideoStream.calculateSessionMinuteUsage());
+console.log(manyToManyVideoStream.calculateSessionMaxUserCount());
