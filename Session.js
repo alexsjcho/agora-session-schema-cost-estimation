@@ -10,8 +10,6 @@ class Session {
   constructor({
     maxMinuteDuration,
     hostVideoProfile,
-    maxHostAggregateResolution,
-    maxAudienceAggregateResolution,
     maxHostCount,
     maxAudienceCount,
     sessionMode,
@@ -21,8 +19,6 @@ class Session {
   } = {}) {
     this.maxMinuteDuration = maxMinuteDuration;
     this.hostVideoProfile = hostVideoProfile;
-    this.maxHostAggregateResolution = maxHostAggregateResolution;
-    this.maxAudienceAggregateResolution = maxAudienceAggregateResolution;
     this.maxHostCount = maxHostCount;
     this.maxAudienceCount = maxAudienceCount;
     //can be either "broadcast" or "communication"
@@ -35,6 +31,34 @@ class Session {
     this.audienceStreamingMode = audienceStreamingMode;
     //boolean
     this.isAudioOnly = isAudioOnly;
+  }
+
+  //Get host's aggregate video resolution
+
+  calculateHostAggregateVideoResolution() {
+    let hostAggregateVideoResolution, optimizedHostVideoResolution;
+
+    optimizedHostVideoResolution = this.maxHostCount - 1;
+
+    hostAggregateVideoResolution = totalAggregateVideoResolution(
+      this.hostVideoProfile,
+      optimizedHostVideoResolution,
+      true
+    );
+
+    return hostAggregateVideoResolution;
+  }
+
+  //Get audience's aggregate video resolution
+  calculateAudienceAggregateVideoResolution() {
+    let audienceAggregateVideoResolution;
+    audienceAggregateVideoResolution = totalAggregateVideoResolution(
+      this.hostVideoProfile,
+      this.maxHostCount,
+      false
+    );
+
+    return audienceAggregateVideoResolution;
   }
 
   //Get max session minute usage count
@@ -74,41 +98,40 @@ class Session {
     let sessionTotalAggregateVideoResolutionValue,
       sessionVideoStreamingCharge,
       sessionTotalCost,
-      hostTotalCost,
-      audienceTotalCost;
+      hostTotalCost;
 
     if ((this.sessionMode = "communication")) {
-      sessionTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
-        this.hostVideoProfile,
-        this.maxHostCount,
-        true
+      sessionTotalAggregateVideoResolutionValue =
+        this.calculateHostAggregateVideoResolution();
+      console.log(
+        "sessionTotalAggregateVideoResolutionValue",
+        sessionTotalAggregateVideoResolutionValue
       );
 
       sessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
         this.hostStreamingMode,
+
         sessionTotalAggregateVideoResolutionValue
       );
+      console.log(" this.hostStreamingMode:", this.hostStreamingMode);
+      console.log("sessionVideoStreamingCharge", sessionVideoStreamingCharge);
       sessionTotalCost =
         this.maxHostCount *
         this.maxMinuteDuration *
         sessionVideoStreamingCharge;
+
+      console.log("sessionTotalCost", sessionTotalCost);
     } else if ((this.sessionMode = "broadcast")) {
-      hostTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
-        this.hostVideoProfile,
-        this.maxHostCount,
-        true
-      );
+      let audienceTotalCost;
+      hostTotalAggregateVideoResolutionValue =
+        this.calculateHostAggregateVideoResolution();
+      audienceTotalAggregateVideoResolution =
+        this.calculateAudienceAggregateVideoResolution();
+
       hostSessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
         this.hostStreamingMode,
         hostTotalAggregateVideoResolutionValue
       );
-
-      audienceTotalAggregateVideoResolution = totalAggregateVideoResolution(
-        this.hostVideoProfile,
-        this.maxHostCount,
-        false
-      );
-
       audienceSessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
         this.audienceStreamingMode,
         audienceTotalAggregateVideoResolution
@@ -132,6 +155,10 @@ class Session {
   //Get all metrics of one session
   calculateSessionMetrics() {
     let sessionMetrics = {
+      maxHostAggregateVideoResolution:
+        this.calculateHostAggregateVideoResolution(),
+      maxAudienceAggregateVideoResolution:
+        this.calculateAudienceAggregateVideoResolution(),
       users: this.calculateSessionMaxUserCount(),
       minutes: this.calculateSessionMinuteUsage(),
       cost: this.calculateMaxSessionCost(),
@@ -147,6 +174,10 @@ class Session {
     let totalCosts = this.calculateMaxSessionCost() * this.sessionCount;
 
     let sessionCountMetrics = {
+      maxHostAggregateVideoResolution:
+        this.calculateHostAggregateVideoResolution(),
+      maxAudienceAggregateVideoResolution:
+        this.calculateAudienceAggregateVideoResolution(),
       users: totalUsers,
       minutes: totalMinutes,
       cost: totalCosts,

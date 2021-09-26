@@ -1,15 +1,8 @@
 import { RESOLUTION } from "../constants/constants.js";
 
-const totalResolutionForUser = (
-  videoProfile,
-  totalUserCount,
-  subtractLocalHostResolution
-) => {
+const totalResolutionForUser = (videoProfile, totalUserCount) => {
   let aggregateHostVideoResolution = 0;
 
-  if (subtractLocalHostResolution) {
-    totalUserCount - 1;
-  }
   switch (videoProfile) {
     case 120:
       return (aggregateHostVideoResolution = 120 * 160 * totalUserCount);
