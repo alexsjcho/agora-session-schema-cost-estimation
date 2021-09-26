@@ -13,4 +13,4 @@ const manyToManyVideoStream = new Session({
 });
 
 console.log(manyToManyVideoStream);
-console.log(manyToManyVideoStream.calculateMaxSessionCost());
+console.log(manyToManyVideoStream.calculateSessionMinuteUsage());

@@ -10,7 +10,6 @@ const totalResolutionForUser = (
   if (subtractLocalHostResolution) {
     totalUserCount - 1;
   }
-  console.log("TOTAL USER COUNT", totalUserCount);
   switch (videoProfile) {
     case 120:
       return (aggregateHostVideoResolution = 120 * 160 * totalUserCount);

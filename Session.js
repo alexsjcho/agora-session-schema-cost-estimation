@@ -1,8 +1,6 @@
 import { totalAggregateVideoResolution } from "./util/aggregateVideoResolution.js";
-import {
-  calculateVideoStreamingVariant,
-  calculateVideoStreamingChargePerMin,
-} from "./util/costBasedOnResolution.js";
+import { calculateVideoStreamingChargePerMin } from "./util/costBasedOnResolution.js";
+//import AddOn from "./AddOn";
 
 //TODO: convert to Typescript in the future
 //TODO: fix import of totalResolutionForUser()
@@ -36,87 +34,112 @@ class Session {
     this.isAudioOnly = isAudioOnly;
   }
 
-  hostsTotalAggregateVideoResolution(
-    sessionUserConfig = { totalHostCount, hostVideoProfile }
-  ) {
-    return totalResolutionForUser(videoProfile, totalUserCount);
+  //Get max session minute usage count
+  calculateSessionMinuteUsage() {
+    let totalMinuteUsage, hostTotalMinuteUsage, audienceTotalMinuteUsage;
+
+    if ((this.sessionMode = "communication")) {
+      hostTotalMinuteUsage = this.maxHostCount * this.maxMinuteDuration;
+      totalMinuteUsage = hostTotalMinuteUsage;
+    } else if ((this.sessionMode = "broadcast")) {
+      hostTotalMinuteUsage = this.maxHostCount * this.maxMinuteDuration;
+      audienceTotalMinuteUsage = this.maxAudienceCount * this.maxMinuteDuration;
+
+      totalMinuteUsage = hostTotalMinuteUsage + audienceTotalMinuteUsage;
+    }
+    return totalMinuteUsage;
   }
 
-  audienceTotalAggregateVideoResolution(sessionUserConfig) {
-    return totalResolutionForUser(
-      sessionUserConfig.hostVideoProfile,
-      sessionUserConfig.totalHostCount,
-      false
-    );
+  //Get session max user count
+  calculateSessionMaxUserCount() {
+    let hostCount, audienceCount, totalUserCount;
+
+    if ((this.sessionMode = "communication")) {
+      hostCount = this.maxHostCount;
+    } else if ((this.sessionMode = "broadcast")) {
+      hostCount = this.maxHostCount;
+      audienceCount = this.maxAudienceCount;
+
+      totalUserCount = hostCount + audienceCount;
+    }
+    return totalUserCount;
   }
+
+  //Get metrics for multiple sessions
 
   calculateMaxSessionCost() {
     let sessionTotalAggregateVideoResolutionValue,
       sessionVideoStreamingCharge,
-      sessionTotalCost;
+      sessionTotalCost,
+      hostTotalCost,
+      audienceTotalCost;
 
     if ((this.sessionMode = "communication")) {
       sessionTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
         this.hostVideoProfile,
         this.maxHostCount,
-        false
-      );
-      console.log(
-        "sessionTotalAggregateVideoResolutionValue:",
-        sessionTotalAggregateVideoResolutionValue
+        true
       );
 
       sessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
         this.hostStreamingMode,
         sessionTotalAggregateVideoResolutionValue
       );
-      console.log("sessionVideoStreamingCharge:", sessionVideoStreamingCharge);
+      sessionTotalCost =
+        this.maxHostCount *
+        this.maxMinuteDuration *
+        sessionVideoStreamingCharge;
+    } else if ((this.sessionMode = "broadcast")) {
+      hostTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
+        this.hostVideoProfile,
+        this.maxHostCount,
+        true
+      );
+      hostSessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
+        this.hostStreamingMode,
+        hostTotalAggregateVideoResolutionValue
+      );
+
+      audienceTotalAggregateVideoResolution = totalAggregateVideoResolution(
+        this.hostVideoProfile,
+        this.maxHostCount,
+        false
+      );
+
+      audienceSessionVideoStreamingCharge = calculateVideoStreamingChargePerMin(
+        this.audienceStreamingMode,
+        audienceTotalAggregateVideoResolution
+      );
+
+      hostTotalCost =
+        this.maxHostCount *
+        this.maxMinuteDuration *
+        sessionVideoStreamingCharge;
+      audienceTotalCost =
+        this.maxAudienceCount *
+        this.maxMinuteDuration *
+        audienceSessionVideoStreamingCharge;
+
+      sessionTotalCost = hostTotalCost + audienceTotalcost;
     }
-    sessionTotalCost =
-      this.maxHostCount * this.maxMinuteDuration * sessionVideoStreamingCharge;
+
     return { sessionTotalCost };
+  }
+
+  //Get all metrics of one session
+  calculateSessionMetrics(
+    calculateSessionMaxUserCount,
+    calculateSessionMinuteUsage,
+    calculateMaxSessionCost
+  ) {
+    let sessionMetrics = {
+      users: calculateSessionMaxUserCount(),
+      minutes: calculateSessionMinuteUsage(),
+      cost: calculateMaxSessionCost(),
+    };
+
+    return sessionMetrics;
   }
 }
 
 export default Session;
-
-/*
-const sessionConfig = {
-  //number
-  duration: 0,
-  //string: "communication", "broadcast"
-  mode: "communication",
-  //number
-  hostCount: 1,
-  //number
-  audienceCount: 0,
-  //number
-  hostMaxAggregateVideoResolution: 921600,
-  //number
-  maxAudienceAggregateVideoResoltuion: 2073600,
-};
-
-const sessionUserConfig = {
-  //number
-  totalHostCount: 4,
-  //number
-  totalAudienceCount: 0,
-  //number
-  hostVideoProfile: 720,
-  //string: "premium","standard"
-  audienceStreamingType: null,
-  //string: "premium"
-  hostStreamingType: "premium",
-};
-
-
-
-
-export default {
-  sessionConfig,
-  sessionUserConfig,
-  calculateSessionCost,
-  hostsTotalAggregateVideoResolution,
-  audienceTotalAggregateVideoResolution,
-};
-*/

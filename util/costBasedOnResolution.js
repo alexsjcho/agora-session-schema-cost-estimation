@@ -1,5 +1,9 @@
 import { RESOLUTION, AUDIENCETYPE } from "../constants/constants.js";
-import { standardStreaming, premiumStreaming } from "../data/unitPrice.js";
+import {
+  standardStreamingPrice,
+  premiumStreamingPrice,
+  cloudRecordingPrice,
+} from "../data/unitPrice.js";
 
 export const calculateVideoStreamingVariant = (resolutionValue) => {
   if (resolutionValue <= 921600) {
@@ -14,20 +18,17 @@ export const calculateVideoStreamingVariant = (resolutionValue) => {
 };
 
 export const calculateVideoStreamingChargePerMin = (audience, resolution) => {
-  console.log("audience value:", audience);
-  console.log("resolution value:", resolution);
-
   switch (audience) {
     case AUDIENCETYPE.STANDARD:
       switch (resolution) {
         case RESOLUTION.HD:
-          return standardStreaming.standardHdCost;
+          return standardStreamingPrice.standardHdCost;
         case RESOLUTION.FULLHD:
-          return standardStreaming.standardFullHDCost;
+          return standardStreamingPrice.standardFullHDCost;
         case RESOLUTION.TWOK:
-          return standardStreaming.standard2KCost;
+          return standardStreamingPrice.standard2KCost;
         case RESOLUTION.TWOKPLUS:
-          return standardStreaming.standard2KPlusCost;
+          return standardStreamingPrice.standard2KPlusCost;
         default:
           break;
       }
@@ -35,17 +36,32 @@ export const calculateVideoStreamingChargePerMin = (audience, resolution) => {
     case AUDIENCETYPE.PREMIUM:
       switch (resolution) {
         case RESOLUTION.HD:
-          return premiumStreaming.premiumHdCost;
+          return premiumStreamingPrice.premiumHdCost;
         case RESOLUTION.FULLHD:
-          return premiumStreaming.premiumFullHdCost;
+          return premiumStreamingPrice.premiumFullHdCost;
         case RESOLUTION.TWOK:
-          return premiumStreaming.premium2KCost;
+          return premiumStreamingPrice.premium2KCost;
         case RESOLUTION.TWOKPLUS:
-          return premiumStreaming.premium2KPlusCost;
+          return premiumStreamingPrice.premium2KPlusCost;
         default:
           break;
       }
       break;
+    default:
+      break;
+  }
+};
+
+export const calculateCloudRecordingChargePerMin = (resolution) => {
+  switch (resolution) {
+    case RESOLUTION.HD:
+      return cloudRecordingPrice.recordingHdResolution;
+    case RESOLUTION.FULLHD:
+      return cloudRecordingPrice.recordingFullHdResolution;
+    case RESOLUTION.TWOK:
+      return cloudRecordingPrice.recording2kResolution;
+    case RESOLUTION.TWOKPLUS:
+      return cloudRecordingPrice.recording2kPlusResolution;
     default:
       break;
   }
