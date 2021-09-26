@@ -15,6 +15,7 @@ class Session {
     maxHostCount,
     maxAudienceCount,
     sessionMode,
+    sessionCount,
     audienceStreamingMode,
     isAudioOnly,
   } = {}) {
@@ -26,6 +27,8 @@ class Session {
     this.maxAudienceCount = maxAudienceCount;
     //can be either "broadcast" or "communication"
     this.sessionMode = sessionMode;
+    //number of sessions in a given month
+    this.sessionCount = sessionCount;
     //host streaming mode is always premium for low latency
     this.hostStreamingMode = "premium";
     //audence streaming mode can be either "premium" or "standard"
@@ -66,8 +69,7 @@ class Session {
     return totalUserCount;
   }
 
-  //Get metrics for multiple sessions
-
+  //Get max cost of the base session type
   calculateMaxSessionCost() {
     let sessionTotalAggregateVideoResolutionValue,
       sessionVideoStreamingCharge,
@@ -124,22 +126,33 @@ class Session {
       sessionTotalCost = hostTotalCost + audienceTotalcost;
     }
 
-    return { sessionTotalCost };
+    return sessionTotalCost;
   }
 
   //Get all metrics of one session
-  calculateSessionMetrics(
-    calculateSessionMaxUserCount,
-    calculateSessionMinuteUsage,
-    calculateMaxSessionCost
-  ) {
+  calculateSessionMetrics() {
     let sessionMetrics = {
-      users: calculateSessionMaxUserCount(),
-      minutes: calculateSessionMinuteUsage(),
-      cost: calculateMaxSessionCost(),
+      users: this.calculateSessionMaxUserCount(),
+      minutes: this.calculateSessionMinuteUsage(),
+      cost: this.calculateMaxSessionCost(),
     };
 
     return sessionMetrics;
+  }
+
+  //Get metrics for multiple sessions
+  calculateMetricsFromSessionCount() {
+    let totalUsers = this.calculateSessionMaxUserCount() * this.sessionCount;
+    let totalMinutes = this.calculateSessionMinuteUsage() * this.sessionCount;
+    let totalCosts = this.calculateMaxSessionCost() * this.sessionCount;
+
+    let sessionCountMetrics = {
+      users: totalUsers,
+      minutes: totalMinutes,
+      cost: totalCosts,
+    };
+
+    return sessionCountMetrics;
   }
 }
 

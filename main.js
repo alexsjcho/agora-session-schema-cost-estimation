@@ -8,9 +8,10 @@ const manyToManyVideoStream = new Session({
   maxHostCount: 3,
   maxAudienceCount: 97,
   sessionMode: "communication",
+  sessionCount: 100,
   audienceStreamingMode: "standard",
   isAudioOnly: false,
 });
 
 console.log(manyToManyVideoStream);
-console.log(manyToManyVideoStream.calculateSessionMaxUserCount());
+console.log(manyToManyVideoStream.calculateMetricsFromSessionCount());
