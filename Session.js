@@ -12,6 +12,8 @@ class Session {
     maxMinuteDuration,
     hostVideoProfile,
     maxHostCount,
+    hostMaxVideoResolution,
+    audienceMaxVideoResolution,
     maxAudienceCount,
     sessionMode,
     sessionCount,
@@ -23,6 +25,8 @@ class Session {
     this.hostVideoProfile = hostVideoProfile;
     this.maxHostCount = maxHostCount;
     this.maxAudienceCount = maxAudienceCount;
+    this.hostMaxVideoResolution = hostMaxVideoResolution;
+    this.audienceMaxVideoResolution = audienceMaxVideoResolution;
     //can be either "broadcast" or "communication"
     this.sessionMode = sessionMode;
     //number of sessions in a given month
@@ -44,8 +48,7 @@ class Session {
 
     hostAggregateVideoResolution = totalAggregateVideoResolution(
       this.hostVideoProfile,
-      optimizedHostVideoResolution,
-      true
+      optimizedHostVideoResolution
     );
 
     return hostAggregateVideoResolution;
@@ -56,11 +59,12 @@ class Session {
     let audienceAggregateVideoResolution;
     audienceAggregateVideoResolution = totalAggregateVideoResolution(
       this.hostVideoProfile,
-      this.maxHostCount,
-      false
+      this.maxHostCount
     );
 
     return audienceAggregateVideoResolution;
+    this.audidenceMaxAggregateVideoResolution =
+      audienceAggregateVideoResolution;
   }
 
   //Get max session minute usage count
