@@ -3,26 +3,25 @@ import { calculateCloudRecordingChargePerMin } from "./util/costBasedOnResolutio
 
 // TODO: create AddOn Class that can append a feature like Cloud Recording to the Session Class
 
-class AddOn {
-  constructor({ session = {} }) {
-    this.session = session;
-  }
-
-  addCloudRecording() {
-    let cloudRecordingCost;
-    let { hostVideoProfile, maxHostCount, maxMinuteDuration } = this.session;
+export const addCloudRecording = (session) => {
+  session.hasCloudRecording = true;
+  const calculateCloudRecordingCosts = () => {
+    let recordingCost,
+      sessionTotalAggregateVideoResolutionValue,
+      sessionVideoStreamingCharge;
+    let { hostVideoProfile, maxHostCount, maxMinuteDuration } = session;
 
     sessionTotalAggregateVideoResolutionValue = totalAggregateVideoResolution(
       hostVideoProfile,
-      maxHostCount,
-      true
+      maxHostCount
     );
 
     sessionVideoStreamingCharge = calculateCloudRecordingChargePerMin(
       sessionTotalAggregateVideoResolutionValue
     );
+    recordingCost = sessionVideoStreamingCharge * maxMinuteDuration;
+    return recordingCost;
+  };
 
-    return (cloudRecordingCost =
-      sessionVideoStreamingCharge * maxMinuteDuration);
-  }
-}
+  session.cloudRecordingCost = calculateCloudRecordingCosts();
+};

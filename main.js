@@ -1,4 +1,5 @@
 import Session from "./Session.js";
+import { addCloudRecording } from "./AddOn.js";
 
 const manyToManyVideoStream = new Session({
   maxMinuteDuration: 60,
@@ -13,3 +14,5 @@ const manyToManyVideoStream = new Session({
 
 console.log(manyToManyVideoStream);
 console.log(manyToManyVideoStream.calculateSessionMetrics());
+console.log("Cloud Recording cost:", addCloudRecording(manyToManyVideoStream));
+console.log(manyToManyVideoStream);
