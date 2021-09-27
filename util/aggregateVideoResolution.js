@@ -35,16 +35,8 @@ const videoStreamingVariant = (resolutionValue) => {
   }
 };
 
-export const totalAggregateVideoResolution = (
-  videoProfile,
-  totalUserCount,
-  subtractLocalHostResolution
-) => {
-  const value = totalResolutionForUser(
-    videoProfile,
-    totalUserCount,
-    subtractLocalHostResolution
-  );
+export const totalAggregateVideoResolution = (videoProfile, totalUserCount) => {
+  const value = totalResolutionForUser(videoProfile, totalUserCount);
   const resolution = videoStreamingVariant(value);
   return resolution;
 };
