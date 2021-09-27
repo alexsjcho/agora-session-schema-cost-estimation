@@ -2,6 +2,7 @@ import Session from "./Session.js";
 import { addCloudRecording } from "./AddOn.js";
 
 const manyToManyVideoStream = new Session({
+  sessionName: "manyToManyVideoStream",
   maxMinuteDuration: 60,
   hostVideoProfile: 720,
   maxHostCount: 3,

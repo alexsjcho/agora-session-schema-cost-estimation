@@ -8,6 +8,7 @@ import { calculateVideoStreamingChargePerMin } from "./util/costBasedOnResolutio
 class Session {
   //using Builder design pattern
   constructor({
+    sessionName,
     maxMinuteDuration,
     hostVideoProfile,
     maxHostCount,
@@ -17,6 +18,7 @@ class Session {
     audienceStreamingMode,
     isAudioOnly,
   } = {}) {
+    this.sessionName = sessionName;
     this.maxMinuteDuration = maxMinuteDuration;
     this.hostVideoProfile = hostVideoProfile;
     this.maxHostCount = maxHostCount;
