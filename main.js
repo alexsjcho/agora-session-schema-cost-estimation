@@ -16,7 +16,7 @@ const liveVideoPodcastSession = new Session({
 
 console.log("Initial Session value:", liveVideoPodcastSession);
 console.log(
-  `Get ${liveVideoPodcastSession} metric values:`,
+  "Get liveVideoPodcastSession metric values:",
   liveVideoPodcastSession.calculateSessionMetrics()
 );
 console.log(

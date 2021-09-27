@@ -12,8 +12,6 @@ class Session {
     maxMinuteDuration,
     hostVideoProfile,
     maxHostCount,
-    hostMaxVideoResolution,
-    audienceMaxVideoResolution,
     maxAudienceCount,
     sessionMode,
     sessionCount,
@@ -25,8 +23,6 @@ class Session {
     this.hostVideoProfile = hostVideoProfile;
     this.maxHostCount = maxHostCount;
     this.maxAudienceCount = maxAudienceCount;
-    this.hostMaxVideoResolution = hostMaxVideoResolution;
-    this.audienceMaxVideoResolution = audienceMaxVideoResolution;
     //can be either "broadcast" or "communication"
     this.sessionMode = sessionMode;
     //number of sessions in a given month
