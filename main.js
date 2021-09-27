@@ -1,8 +1,9 @@
 import Session from "./Session.js";
-import { addCloudRecording } from "./AddOn.js";
+import { addCloudRecording } from "./addOn.js";
+import { addSpeechToTextExtension } from "./extensions.js";
 
-const manyToManyVideoStream = new Session({
-  sessionName: "manyToManyVideoStream",
+const liveVideoPodcastSession = new Session({
+  sessionName: "liveVideoPodcastSession",
   maxMinuteDuration: 60,
   hostVideoProfile: 720,
   maxHostCount: 3,
@@ -13,7 +14,17 @@ const manyToManyVideoStream = new Session({
   isAudioOnly: false,
 });
 
-console.log(manyToManyVideoStream);
-console.log(manyToManyVideoStream.calculateSessionMetrics());
-console.log("Cloud Recording cost:", addCloudRecording(manyToManyVideoStream));
-console.log(manyToManyVideoStream);
+console.log("Initial Session value:", liveVideoPodcastSession);
+console.log(
+  `Get ${liveVideoPodcastSession} metric values:`,
+  liveVideoPodcastSession.calculateSessionMetrics()
+);
+console.log(
+  "Cloud Recording cost:",
+  addCloudRecording(liveVideoPodcastSession)
+);
+console.log(
+  "Add Extension costs:",
+  addSpeechToTextExtension(liveVideoPodcastSession)
+);
+console.log("Updated Session Schema Values:", liveVideoPodcastSession);

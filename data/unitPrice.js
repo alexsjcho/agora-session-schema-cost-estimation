@@ -21,3 +21,5 @@ export const cloudRecordingPrice = {
   recording2kResolution: 0.02399,
   recording2kPlusResolution: 0.05399,
 };
+
+export const speechToTextTranscriptionPerMinuteCost = 0.00149;
